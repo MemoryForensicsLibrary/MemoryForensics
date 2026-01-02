@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "mf_types.h"
+
 
 /*
  * Internal structures and interfaces for Memory Forensics Library.

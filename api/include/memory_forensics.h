@@ -7,6 +7,8 @@ extern "C" {
 
 #include <stddef.h>
 #include <stdint.h>
+#include "mf_types.h"
+
 
 /*
  * Memory Forensics Library

@@ -1,0 +1,7 @@
+[
+  {
+    "directory": ".",
+    "command": "gcc -Iapi/include -Isrc -c src/core/process.c",
+    "file": "src/core/process.c"
+  }
+]

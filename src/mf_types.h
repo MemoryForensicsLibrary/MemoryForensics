@@ -1,0 +1,21 @@
+#ifndef MF_TYPES_H
+#define MF_TYPES_H
+
+typedef enum {
+    MF_OK = 0,
+
+    MF_ERR_INVALID_ARGUMENT,
+    MF_ERR_NO_MEMORY,
+    MF_ERR_NOT_SUPPORTED,
+    MF_ERR_PERMISSION_DENIED,
+
+    MF_ERR_PROCESS_NOT_FOUND,
+    MF_ERR_PROCESS_ACCESS,
+
+    MF_ERR_SNAPSHOT_FAILED,
+    MF_ERR_DIFF_FAILED,
+
+    MF_ERR_INTERNAL
+} mf_error_t;
+
+#endif
