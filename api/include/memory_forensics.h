@@ -9,7 +9,6 @@ extern "C" {
 #include <stdint.h>
 #include "mf_types.h"
 
-
 /*
  * Memory Forensics Library
  *
@@ -18,7 +17,8 @@ extern "C" {
  * This library provides controlled, read-only access to process memory,
  * allowing snapshot creation, comparison, and anomaly detection.
  *
- * Platform-specific details are intentionally hidden from the public API.
+ * All platform-specific mechanisms are intentionally hidden from the public API.
+ * The exposed interface is stable and backend-agnostic.
  */
 
 /* ============================
@@ -28,16 +28,22 @@ extern "C" {
 #define MF_VERSION_MAJOR 0
 #define MF_VERSION_MINOR 1
 #define MF_VERSION_PATCH 0
+#define MF_VERSION_STRING "0.1.0-beta"
 
 /* ============================
  * Forward Declarations
  * ============================ */
 
-/* Opaque handles */
-typedef struct mf_context        mf_context_t;
-typedef struct mf_process        mf_process_t;
-typedef struct mf_snapshot       mf_snapshot_t;
-typedef struct mf_diff           mf_diff_t;
+/*
+ * Opaque handles.
+ *
+ * Internal structures are not exposed to ensure ABI stability
+ * and allow internal refactoring without breaking users.
+ */
+typedef struct mf_context  mf_context_t;
+typedef struct mf_process  mf_process_t;
+typedef struct mf_snapshot mf_snapshot_t;
+typedef struct mf_diff     mf_diff_t;
 
 /* ============================
  * Error Handling
@@ -65,14 +71,20 @@ typedef enum {
  * ============================ */
 
 /*
- * Initializes the memory forensics library.
+ * Initializes the Memory Forensics Library.
  *
- * Must be called before any other API function.
+ * This function must be called before any other API call.
+ * A single context represents all global library state.
+ *
+ * Thread-safety: not thread-safe.
  */
 mf_error_t mf_init(mf_context_t **ctx);
 
 /*
  * Releases all resources associated with the library context.
+ *
+ * After this call, all objects created from the context
+ * become invalid.
  */
 void mf_shutdown(mf_context_t *ctx);
 
@@ -83,7 +95,10 @@ void mf_shutdown(mf_context_t *ctx);
 /*
  * Attaches the library to a target process.
  *
- * pid: Target process ID.
+ * The library operates in read-only mode and does not modify
+ * the target process memory under any circumstance.
+ *
+ * pid: Target process identifier.
  */
 mf_error_t mf_process_attach(
     mf_context_t  *ctx,
@@ -93,6 +108,9 @@ mf_error_t mf_process_attach(
 
 /*
  * Detaches from a previously attached process.
+ *
+ * Any snapshots created from this process remain valid
+ * until explicitly destroyed.
  */
 void mf_process_detach(mf_process_t *process);
 
@@ -101,7 +119,10 @@ void mf_process_detach(mf_process_t *process);
  * ============================ */
 
 /*
- * Creates a snapshot of the current process memory state.
+ * Creates an immutable snapshot of the current process memory state.
+ *
+ * The snapshot represents a point-in-time view of the process memory
+ * and is independent of the process lifetime.
  */
 mf_error_t mf_snapshot_create(
     mf_process_t  *process,
@@ -109,7 +130,7 @@ mf_error_t mf_snapshot_create(
 );
 
 /*
- * Releases a snapshot.
+ * Releases a snapshot and all associated resources.
  */
 void mf_snapshot_destroy(mf_snapshot_t *snapshot);
 
@@ -118,7 +139,10 @@ void mf_snapshot_destroy(mf_snapshot_t *snapshot);
  * ============================ */
 
 /*
- * Compares two memory snapshots and produces a diff object.
+ * Compares two snapshots and produces a diff object describing
+ * memory modifications between them.
+ *
+ * Both snapshots must originate from the same process.
  */
 mf_error_t mf_snapshot_diff(
     const mf_snapshot_t *old_snapshot,
@@ -141,7 +165,7 @@ void mf_diff_destroy(mf_diff_t *diff);
 size_t mf_diff_modified_region_count(const mf_diff_t *diff);
 
 /*
- * Returns the number of bytes changed across all regions.
+ * Returns the total number of modified bytes across all regions.
  */
 size_t mf_diff_modified_bytes(const mf_diff_t *diff);
 
@@ -151,6 +175,8 @@ size_t mf_diff_modified_bytes(const mf_diff_t *diff);
 
 /*
  * Returns a human-readable string for an error code.
+ *
+ * The returned string is statically allocated and must not be freed.
  */
 const char *mf_strerror(mf_error_t err);
 
