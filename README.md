@@ -1,10 +1,8 @@
 # Memory Forensics Library
 
-![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
-![Language C](https://img.shields.io/badge/Language-C-blue)
-![Platform Linux](https://img.shields.io/badge/Platform-Linux-lightgrey)
-![Status](https://img.shields.io/badge/Status-Active%20Development-yellow)
-![License](https://img.shields.io/badge/License-MIT-purple)
+<p align="center">
+  <img src="assets/BannerMemory.png" alt="Memory Forensics Library Banner">
+</p>
 
 A low-level C library for live process memory inspection and runtime integrity analysis.
 
