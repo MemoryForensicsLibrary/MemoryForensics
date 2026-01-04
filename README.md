@@ -16,66 +16,70 @@ A low-level C library for live process memory inspection and runtime integrity a
 
 ## Overview
 
-**Memory Forensics Library** is a low-level, portable C library designed to inspect and analyze
-the memory of running processes in a controlled and ethical manner.
+**Memory Forensics Library** is a low-level C library designed to inspect, model, and analyze
+the memory of running processes with minimal abstraction and full control over execution flow.
 
-The project focuses on **runtime integrity**, **memory forensics**, and **process inspection**
-without relying on network scanning, intrusive hooks, or high-level abstractions.
+The project focuses on **runtime integrity**, **memory forensics**, and **process state analysis**,
+providing direct visibility into live memory without relying on network activity, intrusive hooks,
+or kernel-level components.
 
-It is designed for:
-
-- Security engineers
-- Researchers
-- CI/CD infrastructure
-- Educational and forensic analysis
+The library is intended for environments where **determinism, auditability, and precision**
+are required.
 
 ## Motivation
 
-Modern systems increasingly rely on long-running agents and automated pipelines.
-However, most integrity validation tools focus on binaries, files, or network behavior.
+Modern systems rely heavily on long-running processes, background agents, and automated workloads.
+Despite this, most integrity and security tooling focuses on static artifacts such as binaries,
+filesystems, or external signals.
 
-This library addresses a different problem:
+This library addresses a different class of problem:
 
-> What is happening inside process memory while the program is running?
+> What is the actual state of a process while it is executing?
 
-The goal is to provide a **clean, auditable, and extensible foundation** for answering that question.
+By operating directly on live process memory, the project enables inspection and comparison
+of runtime state in a controlled and reproducible manner.
+
+The goal is to provide a **clean, extensible, and backend-agnostic foundation** for building
+runtime memory analysis tooling.
 
 ## Key Features
 
 - Live process memory inspection
-- Snapshot-based memory forensics
-- Memory region modeling (read / write / execute)
-- Snapshot diffing for anomaly detection
-- Clean OS abstraction layer (backend-driven)
-- Designed for CI/CD and automation environments
+- Snapshot-based memory acquisition
+- Explicit memory region modeling
+- Snapshot diffing and change detection
+- Clear separation between core logic and OS backends
+- Designed for automated and controlled environments
 - No network dependency
-- No kernel modules required
+- No kernel modules or drivers required
 
 ## Architecture
 
-The project is built with a **clean layered architecture**:
+The project follows a **layered and backend-driven architecture**:
 
 ### Public API
 - Opaque handles
 - Stable external contract
+- No platform-specific types exposed
 
 ### Core Engine
-- Memory model
-- Snapshots
-- Diffs
 - Process lifecycle management
+- Memory snapshots
+- Region analysis
+- Snapshot comparison and diffing
 
 ### OS Backends
 - Linux backend (current)
 - Windows backend (planned)
 
-The core engine does not depend on OS-specific mechanisms.
-All platform-specific logic is isolated behind a backend interface.
+All operating system–specific logic is isolated behind a backend interface.
+The core engine remains platform-neutral and does not depend on OS internals.
 
 ## Use Cases
 
-- Runtime integrity validation (e.g. CI/CD agents)
-- Detection of memory injection or tampering
-- Malware analysis and research
-- Security education
-- Controlled forensic analysis with authorization
+- Runtime integrity validation of long-running processes
+- Detection of unexpected memory modifications
+- Analysis of injected or modified execution regions
+- Inspection of automated agents and infrastructure services
+- Controlled forensic analysis in authorized environments
+
