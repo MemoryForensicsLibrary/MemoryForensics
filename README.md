@@ -1,4 +1,4 @@
-# 🕵️‍♂️ Memory Forensics Library
+# Memory Forensics Library
 
 ![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
 ![Language C](https://img.shields.io/badge/Language-C-blue)
@@ -8,14 +8,13 @@
 
 A low-level C library for live process memory inspection and runtime integrity analysis.
 
-## 📌 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Motivation](#motivation)
 - [Key Features](#key-features)
 - [Architecture](#architecture)
 - [Use Cases](#use-cases)
-
 
 ## Overview
 
@@ -26,9 +25,10 @@ The project focuses on **runtime integrity**, **memory forensics**, and **proces
 without relying on network scanning, intrusive hooks, or high-level abstractions.
 
 It is designed for:
+
 - Security engineers
 - Researchers
-- CI/CD integrity validation
+- CI/CD infrastructure
 - Educational and forensic analysis
 
 ## Motivation
@@ -38,16 +38,15 @@ However, most integrity validation tools focus on binaries, files, or network be
 
 This library addresses a different problem:
 
-> **What is happening inside process memory while the program is running?**
+> What is happening inside process memory while the program is running?
 
-The goal is to provide a **clean and extensible foundation** for answering that question.
-
+The goal is to provide a **clean, auditable, and extensible foundation** for answering that question.
 
 ## Key Features
 
 - Live process memory inspection
 - Snapshot-based memory forensics
-- Memory region modeling (R/W/X)
+- Memory region modeling (read / write / execute)
 - Snapshot diffing for anomaly detection
 - Clean OS abstraction layer (backend-driven)
 - Designed for CI/CD and automation environments
@@ -58,27 +57,27 @@ The goal is to provide a **clean and extensible foundation** for answering that 
 
 The project is built with a **clean layered architecture**:
 
-- **Public API**
-  - Opaque handles
-  - Stable external contract
-- **Core Engine**
-  - Memory model
-  - Snapshots
-  - Diffs
-  - Process lifecycle
-- **OS Backends**
-  - Linux backend (current)
-  - Windows backend (planned)
+### Public API
+- Opaque handles
+- Stable external contract
 
-The core does not depend on OS-specific mechanisms.
+### Core Engine
+- Memory model
+- Snapshots
+- Diffs
+- Process lifecycle management
+
+### OS Backends
+- Linux backend (current)
+- Windows backend (planned)
+
+The core engine does not depend on OS-specific mechanisms.
 All platform-specific logic is isolated behind a backend interface.
 
 ## Use Cases
 
-- Runtime integrity validation (e.g. Jenkins agents)
+- Runtime integrity validation (e.g. CI/CD agents)
 - Detection of memory injection or tampering
 - Malware analysis and research
 - Security education
 - Controlled forensic analysis with authorization
-
----
